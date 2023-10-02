@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3 uid="uid://bt8pyt43v6yge"]
+
+[ext_resource type="Script" path="res://Scripts/Component/AoeController.cs" id="1_13ck6"]
+[ext_resource type="PackedScene" uid="uid://cbeteump0yjxk" path="res://Assets/Models/Starfish.fbx" id="1_65a2g"]
+[ext_resource type="Script" path="res://Scripts/Component/AoeBulletController.cs" id="2_is5oe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4ny7x"]
+size = Vector3(2, 2, 2)
+
+[node name="AoE" type="Node3D"]
+script = ExtResource("1_13ck6")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_is5oe")
+
+[node name="Starfish" parent="Area3D" instance=ExtResource("1_65a2g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.787921, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.787921, 0)
+shape = SubResource("BoxShape3D_4ny7x")
+
+[node name="Area3D2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_is5oe")
+
+[node name="Starfish" parent="Area3D2" instance=ExtResource("1_65a2g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.787921, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.787921, 0)
+shape = SubResource("BoxShape3D_4ny7x")
+
+[node name="Area3D3" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_is5oe")
+
+[node name="Starfish" parent="Area3D3" instance=ExtResource("1_65a2g")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D3"]
+shape = SubResource("BoxShape3D_4ny7x")
+
+[node name="Area3D5" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_is5oe")
+
+[node name="Starfish" parent="Area3D5" instance=ExtResource("1_65a2g")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D5"]
+shape = SubResource("BoxShape3D_4ny7x")

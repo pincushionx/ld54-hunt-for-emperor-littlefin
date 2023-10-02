@@ -1,0 +1,11 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://ch0tm1deyansp"]
+
+[ext_resource type="FontFile" uid="uid://d1y2dmrkhnlxo" path="res://Assets/Fonts/Kanit/Kanit-Regular.ttf" id="1_30qod"]
+
+[resource]
+line_spacing = 0.0
+font = ExtResource("1_30qod")
+font_size = 20
+font_color = Color(1, 0.717647, 0.0117647, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)

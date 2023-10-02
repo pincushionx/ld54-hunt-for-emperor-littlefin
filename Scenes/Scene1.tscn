@@ -1,0 +1,985 @@
+[gd_scene load_steps=59 format=3 uid="uid://jkqpohhyhmap"]
+
+[ext_resource type="Script" path="res://Scripts/Component/SceneController.cs" id="1_5o16e"]
+[ext_resource type="PackedScene" uid="uid://brdho5pa5j1gd" path="res://Assets/Models/Cave.fbx" id="1_vjqlc"]
+[ext_resource type="Script" path="res://Scripts/Component/CameraController.cs" id="2_7utf3"]
+[ext_resource type="Script" path="res://Scripts/Component/SubmarineController.cs" id="3_hep1g"]
+[ext_resource type="PackedScene" uid="uid://8084e5lk7w78" path="res://Scenes/Prefab/respawn_point.tscn" id="4_b7qpm"]
+[ext_resource type="PackedScene" uid="uid://lfyljqs6vq1l" path="res://Scenes/Prefab/bullet.tscn" id="5_nv0om"]
+[ext_resource type="PackedScene" uid="uid://c53ab7d4b0x1" path="res://Assets/Models/Submarine.fbx" id="5_pkv4u"]
+[ext_resource type="PackedScene" uid="uid://v50b2p4si2eu" path="res://Scenes/Prefab/anglerfish.tscn" id="6_g0047"]
+[ext_resource type="Script" path="res://Scripts/UI/OverlayController.cs" id="8_7fi1t"]
+[ext_resource type="Shader" path="res://Assets/Materials/shield.gdshader" id="8_tynyq"]
+[ext_resource type="Script" path="res://Scripts/UI/HealthUIController.cs" id="9_8unil"]
+[ext_resource type="Theme" uid="uid://do2lxw2cna1kt" path="res://Scenes/Theme.tres" id="9_o2bvg"]
+[ext_resource type="Texture2D" uid="uid://crkwn03p36mc6" path="res://Assets/UI/UnknownButton.png" id="11_0nalh"]
+[ext_resource type="PackedScene" uid="uid://bnmu5eywnqtyy" path="res://Scenes/Prefab/relic.tscn" id="11_pug7y"]
+[ext_resource type="Script" path="res://Scripts/Component/FishController.cs" id="12_8s8n5"]
+[ext_resource type="Texture2D" uid="uid://dl6etmarouv3s" path="res://Assets/UI/BulletsButton.png" id="13_14c33"]
+[ext_resource type="PackedScene" uid="uid://bt8pyt43v6yge" path="res://Scenes/Prefab/aoe.tscn" id="13_veqjt"]
+[ext_resource type="Texture2D" uid="uid://b74g2agwjekjw" path="res://Assets/UI/AoeButton.png" id="14_434ji"]
+[ext_resource type="Texture2D" uid="uid://dr01t36bhqtv2" path="res://Assets/UI/HealButton.png" id="14_d0o0a"]
+[ext_resource type="Texture2D" uid="uid://d4g06upvqip22" path="res://Assets/UI/ShrinkButton.png" id="16_v4aqu"]
+[ext_resource type="Texture2D" uid="uid://bueteg1sfar68" path="res://Assets/UI/DefenceButton.png" id="17_8t4av"]
+[ext_resource type="Texture2D" uid="uid://wqokf0ksm0g4" path="res://Assets/UI/DarkBlueRect.png" id="19_yol1n"]
+[ext_resource type="Script" path="res://Scripts/Component/BossFightComponent.cs" id="20_a28dh"]
+[ext_resource type="FontFile" uid="uid://d1y2dmrkhnlxo" path="res://Assets/Fonts/Kanit/Kanit-Regular.ttf" id="20_ghl4t"]
+[ext_resource type="PackedScene" uid="uid://o8wg8j6j8n36" path="res://Assets/Models/Littlefin.fbx" id="21_bapcs"]
+[ext_resource type="LabelSettings" uid="uid://bm2h4owiokym0" path="res://Scenes/Prefab/Bottom_Bar_settings.tres" id="21_yf2tx"]
+[ext_resource type="LabelSettings" uid="uid://ch0tm1deyansp" path="res://Scenes/Title.tres" id="22_4jgga"]
+[ext_resource type="PackedScene" uid="uid://be5ehgadafjxy" path="res://Scenes/Prefab/redanglerfish.tscn" id="28_dvmav"]
+[ext_resource type="Texture2D" uid="uid://bi3aj8odkblr8" path="res://Assets/UI/MovementInstructions.png" id="29_jhjqj"]
+[ext_resource type="Texture2D" uid="uid://7px40n25xabn" path="res://Assets/UI/powers.png" id="31_lofvs"]
+
+[sub_resource type="Environment" id="Environment_8pikp"]
+ambient_light_source = 2
+ambient_light_color = Color(0.517647, 0.580392, 0.721569, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u66i7"]
+size = Vector3(5, 2, 2)
+
+[sub_resource type="Gradient" id="Gradient_4vd72"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1cucr"]
+gradient = SubResource("Gradient_4vd72")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h6s6f"]
+emission_shape = 1
+emission_sphere_radius = 5.0
+particle_flag_align_y = true
+flatness = 1.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -250.0
+color_ramp = SubResource("GradientTexture1D_1cucr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gecwd"]
+emission_enabled = true
+emission = Color(1, 0.717647, 0.0117647, 1)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_lrqn5"]
+material = SubResource("StandardMaterial3D_gecwd")
+shape = 0
+size = 0.1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2xtja"]
+viewport_path = NodePath("Submarine/HealthBarViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vu5ew"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kuqkh"]
+bg_color = Color(0.8, 0, 0.0352941, 1)
+
+[sub_resource type="Animation" id="Animation_w3vw3"]
+resource_name = "Damaged"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Submarine:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.21, 1.1, 1.1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_d6dxh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Submarine:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vmis7"]
+_data = {
+"Damaged": SubResource("Animation_w3vw3"),
+"RESET": SubResource("Animation_d6dxh")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_prsd4"]
+render_priority = 0
+shader = ExtResource("8_tynyq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fmte2"]
+texture = ExtResource("19_yol1n")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nfgr8"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r6xt7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k6f70"]
+size = Vector3(50, 20, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l1xal"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kv2gw"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_7yaou"]
+viewport_path = NodePath("BossFight/LittleFin/HealthBarViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6b4v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ig13"]
+bg_color = Color(0.8, 0, 0.0352941, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l75wu"]
+size = Vector3(200, 75, 10)
+
+[sub_resource type="Animation" id="Animation_0ggsd"]
+resource_name = "Bite"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Littlefin:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Littlefin:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0.427606, 1.5708, 0), Vector3(0, 1.5708, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3c5ou"]
+resource_name = "Die"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Littlefin:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 1.8, 2.7, 3, 3.3, 3.6, 3.9, 4.2, 4.6, 4.8, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 5, 0), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0, 2, 0), Vector3(0, 3, 0), Vector3(0, 4, 0), Vector3(0, 5, 0), Vector3(0, 3.63637, 0), Vector3(0, 0, 0), Vector3(0, -27.6321, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Littlefin:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2.7, 3, 3.3, 3.6, 3.9, 4.2, 4.6, 4.8, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 2.61799, 0), Vector3(0, 0.872665, 0), Vector3(0, 1.5708, 0), Vector3(0, 2.0944, 0), Vector3(0, 1.22173, 0), Vector3(0, 2.0944, 0), Vector3(0, 1.22173, 0), Vector3(0, 2.0944, 0), Vector3(-0.740085, 2.09824, -0.374286), Vector3(-0.307429, -1.82863, 3.13142), Vector3(-0.153714, -0.128915, 1.56571), Vector3(0, 1.5708, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Littlefin:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("OmniLight3D4:omni_attenuation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 2.1, 2.5, 4.1, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [7.72748, 0.00176025, 2.64582e-05, 2.64582e-05, 7.72748]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OmniLight3D4:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.5, 4.1, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 1.569, 13.881, 13.881, 1.0]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(4.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_l1xv3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Littlefin:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Littlefin:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Littlefin:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("OmniLight3D4:omni_attenuation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [7.72748]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OmniLight3D4:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fvx6f"]
+_data = {
+"Bite": SubResource("Animation_0ggsd"),
+"Die": SubResource("Animation_3c5ou"),
+"RESET": SubResource("Animation_l1xv3")
+}
+
+[node name="Scene" type="Node3D"]
+script = ExtResource("1_5o16e")
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_8pikp")
+
+[node name="Cave" parent="." instance=ExtResource("1_vjqlc")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 7.5, 0, -17.5)
+current = true
+script = ExtResource("2_7utf3")
+
+[node name="Submarine" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.6294, 2.74486, 0)
+collision_layer = 2
+motion_mode = 1
+slide_on_ceiling = false
+floor_stop_on_slope = false
+floor_block_on_wall = false
+script = ExtResource("3_hep1g")
+BulletPrefab = ExtResource("5_nv0om")
+AoePrefab = ExtResource("13_veqjt")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Submarine"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.50131, 0, 0)
+light_color = Color(0.745098, 0.737255, 0, 1)
+light_energy = 20.0
+spot_range = 30.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Submarine"]
+shape = SubResource("BoxShape3D_u66i7")
+
+[node name="Submarine" parent="Submarine" instance=ExtResource("5_pkv4u")]
+
+[node name="Sparkles" type="GPUParticles3D" parent="Submarine"]
+emitting = false
+amount = 20
+lifetime = 5.0
+one_shot = true
+trail_lifetime = 0.13
+process_material = SubResource("ParticleProcessMaterial_h6s6f")
+draw_pass_1 = SubResource("RibbonTrailMesh_lrqn5")
+
+[node name="Sprite3D" type="Sprite3D" parent="Submarine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.586666, 2.62399, 0)
+billboard = 1
+double_sided = false
+texture = SubResource("ViewportTexture_2xtja")
+
+[node name="HealthBarViewport" type="SubViewport" parent="Submarine"]
+size = Vector2i(200, 10)
+render_target_update_mode = 4
+
+[node name="HealthBar" type="ProgressBar" parent="Submarine/HealthBarViewport"]
+custom_minimum_size = Vector2(200, 10)
+offset_right = 100.0
+offset_bottom = 100.0
+theme_override_styles/background = SubResource("StyleBoxFlat_vu5ew")
+theme_override_styles/fill = SubResource("StyleBoxFlat_kuqkh")
+step = 1.0
+value = 50.0
+rounded = true
+show_percentage = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Submarine"]
+libraries = {
+"": SubResource("AnimationLibrary_vmis7")
+}
+
+[node name="Shield" type="CSGSphere3D" parent="Submarine"]
+visible = false
+radius = 4.0
+rings = 12
+material = SubResource("ShaderMaterial_prsd4")
+
+[node name="RespawnPoints" type="Node" parent="."]
+
+[node name="StartingRespawnPoint" parent="RespawnPoints" instance=ExtResource("4_b7qpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.4158, 0, 0)
+
+[node name="RespawnPoint3" parent="RespawnPoints" instance=ExtResource("4_b7qpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -442.714, -53.367, 0)
+
+[node name="UI" type="Node" parent="." node_paths=PackedStringArray("BulletsCooldownLabel", "AoeCooldownLabel", "SpeedCooldownLabel", "ShrinkCooldownLabel", "ShieldCooldownLabel", "BulletsButton", "AoEButton", "SpeedButton", "ShrinkButton", "ShieldButton", "_playerWonPanel", "_playerWonPanelCloseButton", "_introPanel", "_introPanelCloseButton")]
+script = ExtResource("8_7fi1t")
+BulletsCooldownLabel = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer/Cooldown")
+AoeCooldownLabel = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer2/Cooldown")
+SpeedCooldownLabel = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer3/Cooldown")
+ShrinkCooldownLabel = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer4/Cooldown")
+ShieldCooldownLabel = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer5/Cooldown")
+BulletsButton = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer/BulletsButton")
+AoEButton = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer2/AoEButton")
+SpeedButton = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer3/SpeedButton")
+ShrinkButton = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer4/ShrinkButton")
+ShieldButton = NodePath("Panel/VBoxContainer/HBoxContainer/VBoxContainer5/ShieldButton")
+_HiddenAbilityIcon = ExtResource("11_0nalh")
+_BulletsButtonIcon = ExtResource("13_14c33")
+_AoEButtonIcon = ExtResource("14_434ji")
+_SpeedButtonIcon = ExtResource("14_d0o0a")
+_ShrinkButtonIcon = ExtResource("16_v4aqu")
+_ShieldButtonIcon = ExtResource("17_8t4av")
+_playerWonPanel = NodePath("PlayerWon")
+_playerWonPanelCloseButton = NodePath("PlayerWon/VBoxContainer/CloseButton")
+_introPanel = NodePath("Intro")
+_introPanelCloseButton = NodePath("Intro/VBoxContainer/CloseButton")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="UI"]
+visible = false
+offset_right = 50.0
+offset_bottom = 50.0
+
+[node name="Panel" type="Panel" parent="UI/AspectRatioContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/AspectRatioContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Health" type="RichTextLabel" parent="UI/AspectRatioContainer/Panel/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+text = "Health"
+fit_content = true
+scroll_active = false
+script = ExtResource("9_8unil")
+
+[node name="Panel" type="PanelContainer" parent="UI"]
+clip_contents = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -157.0
+offset_top = -96.0
+offset_right = 158.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 6
+size_flags_vertical = 10
+theme_override_styles/panel = SubResource("StyleBoxTexture_fmte2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Panel"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="BoxContainer" parent="UI/Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer6" type="VBoxContainer" parent="UI/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Cooldown" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer6"]
+layout_mode = 2
+text = "Cooldown or
+Duration"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Blank" type="Button" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer6"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("9_o2bvg")
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer6"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "Key"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Cooldown" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "0"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BulletsButton" type="Button" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("9_o2bvg")
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+icon = ExtResource("13_14c33")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "1"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Cooldown" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "0"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AoEButton" type="Button" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+icon = ExtResource("14_434ji")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "2"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="UI/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Cooldown" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "0"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpeedButton" type="Button" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+icon = ExtResource("14_d0o0a")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "3"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="UI/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Cooldown" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer5"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "0"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShieldButton" type="Button" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer5"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+icon = ExtResource("17_8t4av")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer5"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "4"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="UI/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Cooldown" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "0"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShrinkButton" type="Button" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+icon = ExtResource("16_v4aqu")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="UI/Panel/VBoxContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "5"
+label_settings = ExtResource("21_yf2tx")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerWon" type="PanelContainer" parent="UI"]
+clip_contents = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.5
+offset_top = -48.0
+offset_right = 157.5
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+theme_override_styles/panel = SubResource("StyleBoxTexture_fmte2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PlayerWon"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Title" type="Label" parent="UI/PlayerWon/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+text = "That's all! Thanks for playing!
+
+"
+label_settings = ExtResource("22_4jgga")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Text" type="Label" parent="UI/PlayerWon/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "Emperor Littlefin has been vanquished. The ruins have been plundered for their secrets. 
+
+This game was made in 48 hours for Ludum Dare 54. See you in LD55!"
+label_settings = ExtResource("21_yf2tx")
+autowrap_mode = 1
+
+[node name="CloseButton" type="Button" parent="UI/PlayerWon/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("9_o2bvg")
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+text = "Close this silly window. I'm not done exploring,"
+flat = true
+icon_alignment = 1
+
+[node name="Intro" type="PanelContainer" parent="UI"]
+clip_contents = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.5
+offset_top = -48.0
+offset_right = 157.5
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+theme_override_styles/panel = SubResource("StyleBoxTexture_fmte2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Intro"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Title" type="Label" parent="UI/Intro/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+text = "Hunt for Emperor Littlefin"
+label_settings = ExtResource("22_4jgga")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/Intro/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("29_jhjqj")
+expand_mode = 5
+
+[node name="Text" type="Label" parent="UI/Intro/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("9_o2bvg")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("20_ghl4t")
+theme_override_font_sizes/font_size = 14
+text = "A really big fish named
+                     Emperor Littlefin 
+                                    needs to be killed.
+
+To accomplish this task, you need to become more powerful. In these winding caves are 5 ruins, each with mysterious power that will no doubt help your mission.
+
+"
+label_settings = ExtResource("21_yf2tx")
+autowrap_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="UI/Intro/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("31_lofvs")
+expand_mode = 5
+
+[node name="CloseButton" type="Button" parent="UI/Intro/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("9_o2bvg")
+theme_override_colors/icon_hover_color = Color(0.854902, 0.854902, 0.854902, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.737255, 0.737255, 0.737255, 1)
+theme_override_constants/icon_max_width = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_nfgr8")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r6xt7")
+text = "Click to close and begin exploring!"
+flat = true
+icon_alignment = 1
+
+[node name="Relics" type="Node" parent="."]
+
+[node name="Relic1" parent="Relics" instance=ExtResource("11_pug7y")]
+IsBulletRelic = true
+
+[node name="Relic2" parent="Relics" instance=ExtResource("11_pug7y")]
+transform = Transform3D(-0.745476, 0, 0.666533, 0, 1, 0, -0.666533, 0, -0.745476, -358.874, 110.356, 4.31014)
+IsShieldRelic = true
+
+[node name="Relic3" parent="Relics" instance=ExtResource("11_pug7y")]
+transform = Transform3D(-0.516474, 0, -0.856303, 0, 1, 0, 0.856303, 0, -0.516474, -370.323, -86.0193, 10.2266)
+IsSpeedRelic = true
+
+[node name="Relic4" parent="Relics" instance=ExtResource("11_pug7y")]
+transform = Transform3D(-0.516474, 0, -0.856303, 0, 1, 0, 0.856303, 0, -0.516474, -457.288, 65.4196, 9.96775)
+IsShrinkRelic = true
+
+[node name="Relic5" parent="Relics" instance=ExtResource("11_pug7y")]
+transform = Transform3D(-0.76921, 0, -0.638996, 0, 1, 0, 0.638996, 0, -0.76921, -619.369, 68.094, 9.07425)
+IsAoeRelic = true
+
+[node name="BossFight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -527.159, -128.047, 0)
+script = ExtResource("20_a28dh")
+
+[node name="BossFightArea" type="Area3D" parent="BossFight"]
+transform = Transform3D(-3.97961, 0, -0.403392, 0, 4, 0, 0.403392, 0, -3.97961, 21.9469, -19.6124, 0)
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="BossFight/BossFightArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.477098, 0.459836)
+shape = SubResource("BoxShape3D_k6f70")
+
+[node name="LittleFin" type="CharacterBody3D" parent="BossFight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.2048, -18.4762, 0)
+collision_layer = 0
+collision_mask = 6
+motion_mode = 1
+script = ExtResource("12_8s8n5")
+Speed = 10.0
+Damage = 20
+Health = 400
+MaxHealth = 400
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="BossFight/LittleFin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0551147, 8.09057, 4.07329)
+light_size = 0.5
+omni_range = 20.0
+omni_attenuation = 7.72748
+
+[node name="Area3D" type="Area3D" parent="BossFight/LittleFin"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.445432, 1.18041, 0)
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="BossFight/LittleFin/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513809, 0.329014, -0.0467911)
+shape = SubResource("BoxShape3D_l1xal")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossFight/LittleFin"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.228088, 2.16367, -0.0837784)
+shape = SubResource("BoxShape3D_kv2gw")
+
+[node name="Sprite3D" type="Sprite3D" parent="BossFight/LittleFin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.91916, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_7yaou")
+
+[node name="HealthBarViewport" type="SubViewport" parent="BossFight/LittleFin"]
+size = Vector2i(200, 10)
+render_target_update_mode = 4
+
+[node name="HealthBar" type="ProgressBar" parent="BossFight/LittleFin/HealthBarViewport"]
+custom_minimum_size = Vector2(200, 10)
+offset_right = 100.0
+offset_bottom = 100.0
+theme_override_styles/background = SubResource("StyleBoxFlat_n6b4v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7ig13")
+step = 1.0
+value = 50.0
+rounded = true
+show_percentage = false
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="BossFight/LittleFin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.301666, 0)
+shape = SubResource("BoxShape3D_l75wu")
+collision_mask = 2
+
+[node name="AnimationPlayer1" type="AnimationPlayer" parent="BossFight/LittleFin"]
+libraries = {
+"": SubResource("AnimationLibrary_fvx6f")
+}
+
+[node name="Littlefin" parent="BossFight/LittleFin" instance=ExtResource("21_bapcs")]
+transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, 0, 0, 0)
+
+[node name="Fish" type="Node" parent="."]
+
+[node name="Anglerfish" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -207.248, 33.052, 0)
+
+[node name="Anglerfish8" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -492.978, -51.7861, 0)
+
+[node name="Anglerfish7" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -385.132, 14.3169, 0)
+
+[node name="Anglerfish2" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -283.448, 140.233, 0)
+
+[node name="Anglerfish3" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -507.105, 226.201, 0)
+
+[node name="Anglerfish4" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -529.898, -159.902, 0)
+
+[node name="Anglerfish5" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -529.898, -127.712, 0)
+
+[node name="Anglerfish6" parent="Fish" instance=ExtResource("6_g0047")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -691.937, 102.124, 0)
+
+[node name="RedAnglerfish" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -344.389, 21.161, 0)
+
+[node name="RedAnglerfish7" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -500.643, -143.536, 0)
+
+[node name="RedAnglerfish8" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -466.038, -129.554, 0)
+
+[node name="RedAnglerfish9" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -482.287, -167.05, 0)
+
+[node name="RedAnglerfish2" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -320.691, 24.5476, 0)
+
+[node name="RedAnglerfish3" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -442.783, 170.772, 0)
+
+[node name="RedAnglerfish4" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -430.929, 126.829, 0)
+
+[node name="RedAnglerfish5" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -526.564, 170.74, 0)
+
+[node name="RedAnglerfish6" parent="Fish" instance=ExtResource("28_dvmav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -562.179, 170.74, 0)
+
+[node name="Intro" type="Node" parent="."]
+
+[connection signal="area_entered" from="BossFight/BossFightArea" to="BossFight/LittleFin" method="_on_area_3d_area_entered" flags=18]
+[connection signal="area_entered" from="BossFight/LittleFin/Area3D" to="BossFight/LittleFin" method="_on_area_3d_area_entered" flags=18]

@@ -1,0 +1,59 @@
+[gd_scene load_steps=11 format=3 uid="uid://bnmu5eywnqtyy"]
+
+[ext_resource type="Script" path="res://Scripts/Component/RelicController.cs" id="1_pk7w7"]
+[ext_resource type="PackedScene" uid="uid://d23fiv2yg7o2q" path="res://Assets/Models/ruins 1.fbx" id="2_u8g5s"]
+[ext_resource type="PackedScene" uid="uid://ogkc0dy126wi" path="res://Assets/Models/RelicWithBall.fbx" id="3_munf3"]
+[ext_resource type="PackedScene" uid="uid://8084e5lk7w78" path="res://Scenes/Prefab/respawn_point.tscn" id="4_jnkv4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fk6bg"]
+size = Vector3(20, 20, 20)
+
+[sub_resource type="Gradient" id="Gradient_d8di3"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bghoq"]
+gradient = SubResource("Gradient_d8di3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_js4lj"]
+emission_shape = 1
+emission_sphere_radius = 5.0
+particle_flag_align_y = true
+flatness = 1.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -250.0
+color_ramp = SubResource("GradientTexture1D_bghoq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xy4o1"]
+emission_enabled = true
+emission = Color(1, 0.717647, 0.0117647, 1)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_7vsan"]
+material = SubResource("StandardMaterial3D_xy4o1")
+shape = 0
+size = 0.1
+
+[node name="Relic" type="Node3D"]
+transform = Transform3D(-0.745476, 0, 0.666533, 0, 1, 0, -0.666533, 0, -0.745476, -262.935, 40, 11.034)
+script = ExtResource("1_pk7w7")
+
+[node name="ruins 1" parent="." instance=ExtResource("2_u8g5s")]
+
+[node name="RelicWithBall" parent="." instance=ExtResource("3_munf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.155899, 1.39161, 1.09346)
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15594, 8.46523, 3.61723)
+shape = SubResource("BoxShape3D_fk6bg")
+
+[node name="Sparkles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.7164, 0)
+amount = 20
+trail_lifetime = 0.13
+process_material = SubResource("ParticleProcessMaterial_js4lj")
+draw_pass_1 = SubResource("RibbonTrailMesh_7vsan")
+
+[node name="RespawnPoint" parent="." instance=ExtResource("4_jnkv4")]
+IsSilent = true

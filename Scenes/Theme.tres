@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://do2lxw2cna1kt"]
+
+[ext_resource type="FontFile" uid="uid://d1y2dmrkhnlxo" path="res://Assets/Fonts/Kanit/Kanit-Regular.ttf" id="1_x7bnv"]
+
+[resource]
+default_font = ExtResource("1_x7bnv")
+default_font_size = 12

@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dq6syujd3i11x"]
+
+[ext_resource type="Texture2D" uid="uid://dyyxvvda2qoj2" path="res://Assets/Materials/SpeckledBg.png" id="1_hqwnh"]
+
+[resource]
+albedo_color = Color(0.984314, 0.521569, 0, 1)
+albedo_texture = ExtResource("1_hqwnh")
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.52
+subsurf_scatter_texture = ExtResource("1_hqwnh")
+uv1_scale = Vector3(0.05, 0.05, 0.05)
+uv1_triplanar = true
+uv1_world_triplanar = true

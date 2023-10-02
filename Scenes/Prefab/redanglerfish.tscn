@@ -1,0 +1,237 @@
+[gd_scene load_steps=12 format=3 uid="uid://be5ehgadafjxy"]
+
+[ext_resource type="Script" path="res://Scripts/Component/FishController.cs" id="1_bikfx"]
+[ext_resource type="PackedScene" uid="uid://1geslqi8hfwl" path="res://Assets/Models/Anglerfish-red.fbx" id="2_c0k2f"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jbrto"]
+radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h1t4g"]
+size = Vector3(0.75, 0.75, 0.75)
+
+[sub_resource type="Animation" id="Animation_f58ne"]
+resource_name = "Bite"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Anglerfish-red:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(1.0472, 1.5708, 0), Vector3(0, 1.5708, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Anglerfish-red:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jp1sd"]
+resource_name = "Die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Anglerfish-red:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2, 0), Vector3(0, 3, 0), Vector3(0, -5, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Anglerfish-red:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(-0.523599, 1.5708, 0), Vector3(-0.174533, 1.5708, 0), Vector3(-3.14159, 1.5708, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OmniLight3D4:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.6, 2.725]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("OmniLight3D4:omni_attenuation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [4.72979, 0.0058871]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_bg3pn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Anglerfish-red:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Anglerfish-red:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OmniLight3D4:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("OmniLight3D4:omni_attenuation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [4.72979]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gbpxi"]
+_data = {
+"Bite": SubResource("Animation_f58ne"),
+"Die": SubResource("Animation_jp1sd"),
+"RESET": SubResource("Animation_bg3pn")
+}
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_38rta"]
+viewport_path = NodePath("HealthBarViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6b4v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ig13"]
+bg_color = Color(0.8, 0, 0.0352941, 1)
+
+[node name="RedAnglerfish" type="CharacterBody3D"]
+collision_layer = 0
+collision_mask = 6
+motion_mode = 1
+script = ExtResource("1_bikfx")
+Speed = 10.0
+Damage = 10
+Health = 10
+MaxHealth = 10
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.897669, 3.2321, 0.150802)
+light_energy = 2.6
+light_size = 0.5
+omni_range = 20.0
+omni_attenuation = 4.72979
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+transform = Transform3D(15, 0, 0, 0, 7, 0, 0, 0, 5, 15.4734, 0, 0)
+shape = SubResource("SphereShape3D_jbrto")
+target_position = Vector3(0, 0, 0)
+max_results = 1
+collision_mask = 2
+debug_shape_custom_color = Color(0.929412, 0, 0, 1)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.445432, 1.18041, 0)
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0203832, 0, 0)
+shape = SubResource("BoxShape3D_h1t4g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.851194, 1.18041, 0)
+shape = SubResource("BoxShape3D_h1t4g")
+
+[node name="AnimationPlayer1" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_gbpxi")
+}
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.826764, 3.9273, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_38rta")
+
+[node name="HealthBarViewport" type="SubViewport" parent="."]
+size = Vector2i(200, 10)
+render_target_update_mode = 4
+
+[node name="HealthBar" type="ProgressBar" parent="HealthBarViewport"]
+custom_minimum_size = Vector2(200, 10)
+offset_right = 100.0
+offset_bottom = 100.0
+theme_override_styles/background = SubResource("StyleBoxFlat_n6b4v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7ig13")
+step = 1.0
+value = 50.0
+rounded = true
+show_percentage = false
+
+[node name="Anglerfish-red" parent="." instance=ExtResource("2_c0k2f")]
+transform = Transform3D(-2.71499e-06, 0, 0.75, 0, 0.75, 0, -0.75, 0, -2.71499e-06, 0, 2, 0)
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
